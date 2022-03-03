@@ -22,9 +22,17 @@ struct Token {
 
 Token *token;
 
-void error(char *fmt, ...) {
+// 入力プログラム
+char *user_input;
+
+void error_at(char *loc, char *fmt, ...) {
     va_list ap;
     va_start(ap, fmt);
+
+    int pos = loc - user_input;
+    fprintf(stderr, "%s\n", user_input);
+    fprintf(stderr, "%*s", pos, "");
+    fprintf(stderr, "^ ");
     vfprintf(stderr, fmt, ap);
     fprintf(stderr, "\n");
     exit(1);
@@ -40,13 +48,13 @@ bool consume(char op) {
 
 void expect(char op) {
     if (!consume(op)) {
-        error("'%c'ではありません", op);
+        error_at(&op, "'%c'ではありません", op);
     }
 }
 
 int expect_number() {
     if (token->kind != TK_NUM) {
-        error("数ではありません");
+        error_at(token->str, "数ではありません");
     }
     int val = token->val;
     token = token->next;
@@ -86,7 +94,7 @@ Token *tokenize(char *p) {
             cur->val = strtol(p, &p, 10);
             continue;
         }
-        error("トークナイズできません");
+        error_at(p, "トークナイズできません");
     }
     new_token(TK_EOF, cur, p);
     return head.next;
@@ -98,6 +106,7 @@ int main(int argc, char **argv) {
         return 1;
     }
     char *p = argv[1];
+    user_input = argv[1];
 
     // トークナイズする
     token = tokenize(argv[1]);
