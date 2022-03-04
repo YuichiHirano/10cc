@@ -14,7 +14,7 @@
 	"settings": {},
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"donjayamanne.githistory",
+		"mhutchie.git-graph",
 		"eamodio.gitlens",
 		"github.copilot",
 		"ms-vscode.cpptools"
