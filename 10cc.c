@@ -79,7 +79,6 @@ bool consume(char *op) {
     if (token->kind != TK_RESERVED || strlen(op) != token->len || memcmp(token->str, op, token->len)) {
         return false;
     }
-    // fprintf(stderr, "consume: %s\n", op);
 
     token = token->next;
     return true;
@@ -106,7 +105,6 @@ bool at_eof() {
 
 // 新しいトークンを作成してcurに繋げる
 Token *new_token(TokenKind kind, Token *cur, char *str, int len) {
-    // fprintf(stderr, "new_token: %s\n", str);
     Token *tok = calloc(1, sizeof(Token));
     tok->kind = kind;
     tok->str = str;
