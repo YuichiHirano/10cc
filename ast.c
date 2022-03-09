@@ -26,6 +26,16 @@ bool consume(char *op) {
     return true;
 }
 
+Token *consume_ident() {
+    if (token->kind != TK_IDENT) {
+        return NULL;
+    }
+
+    Token *tok = token;
+    token = token->next;
+    return tok;
+}
+
 void expect(char *op) {
     if (!consume(op)) {
         error_at(op, "'%c'ではありません", op);
@@ -52,9 +62,35 @@ Node *mul();
 Node *primary();
 Node *unary();
 
-Node *expr() {
+Node *code[100];
+
+Node *assign() {
     Node *node = equality();
+    if (consume("=")) {
+        node = new_node(ND_ASSIGN, node, assign());
+    }
     return node;
+}
+
+Node *expr() {
+    return assign();
+}
+
+Node *stmt() {
+    Node *node = expr();
+
+    // error("stmt", (int)token->kind);
+    // expect(";");
+    return node;
+}
+
+void program() {
+    int i = 0;
+    while (!at_eof()) {
+        code[i++] = stmt();
+        // error("at_eof");
+    }
+    code[i] = NULL;
 }
 
 Node *equality() {
@@ -142,6 +178,15 @@ Node *primary() {
     if (consume("(")) {
         Node *node = expr();
         expect(")");
+        return node;
+    }
+
+    // 記号であるか判定
+    Token *tok = consume_ident();
+    if (tok) {
+        Node *node = calloc(1, sizeof(Node));
+        node->kind = ND_LVAR;
+        node->offset = (tok->str[0] - 'a' + 1) * 8;
         return node;
     }
 

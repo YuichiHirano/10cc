@@ -41,6 +41,11 @@ Token *tokenize(char *p) {
             cur->val = strtol(p, &p, 10);
             continue;
         }
+
+        if ('a' <= *p && *p <= 'z') {
+            cur = new_token(TK_IDENT, cur, p++, 1);
+            continue;
+        }
         error_at(p, "トークナイズできません");
     }
     new_token(TK_EOF, cur, p, 1);
