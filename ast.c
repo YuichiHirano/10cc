@@ -38,7 +38,7 @@ Token *consume_ident() {
 
 void expect(char *op) {
     if (!consume(op)) {
-        error_at(op, "'%c'ではありません", op);
+        error("'%s'ではありません", op);
     }
 }
 
@@ -80,7 +80,7 @@ Node *stmt() {
     Node *node = expr();
 
     // error("stmt", (int)token->kind);
-    // expect(";");
+    expect(";");
     return node;
 }
 

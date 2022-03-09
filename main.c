@@ -12,6 +12,7 @@ int main(int argc, char **argv) {
     }
     char *p = argv[1];
     user_input = argv[1];
+    // error("%s input", p);
 
     // トークナイズする
     token = tokenize(argv[1]);

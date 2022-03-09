@@ -47,7 +47,7 @@ struct Token {
 };
 
 Token *tokenize(char *p);
-Node *expr();
+void program();
 void gen(Node *node);
 
 void error_at(char *loc, char *fmt, ...);
